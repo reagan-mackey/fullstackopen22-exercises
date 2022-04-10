@@ -1,9 +1,27 @@
 import { useState } from 'react'
 
-const Display = (props) => {
- return (
-  <ul><li>{props.title + " " + props.value}</li></ul>
- )
+const Statistics = ({good, neutral, bad, total}) => {
+  if (total === 0) {
+    return (
+      <>
+      <h1>statistics</h1>
+      <p>No feedback given yet.</p>
+      </>
+    ) 
+  }
+  return (
+    <>
+    <h1>statistics</h1>
+    <ul>
+      <li>{"good " + good}</li>
+      <li>{"neutral " + neutral}</li>
+      <li>{"bad " + bad}</li>
+      <li>{"total " + total}</li>
+      <li>{"average " + ((total === 0) ? 0 : (good - bad) / total)}</li>
+      <li>{"positive " + ((total === 0) ? 0 + "%" : (good / total) * 100 + "%")}</li>
+    </ul>
+    </>
+  )
 }
 
 const App = () => {
@@ -31,13 +49,7 @@ const App = () => {
       <button onClick={() => handleClick("good")}>good</button>
       <button onClick={() => handleClick("neutral")}>neutral</button>
       <button onClick={() => handleClick("bad")}>bad</button>
-      <h1>statistics</h1>
-      <Display value={good} title="good" />
-      <Display value={neutral} title="neutral" />
-      <Display value={bad} title="bad" />
-      <Display value={total} title="total" />
-      <Display value={(total === 0) ? 0 : (good - bad) / total} title="average" />
-      <Display value={(total === 0) ? 0 + "%" : (good / total) * 100 + "%"} title="positive" />
+      <Statistics good={good} neutral={neutral} bad={bad} total={total} />
     </div>
   )
 }
