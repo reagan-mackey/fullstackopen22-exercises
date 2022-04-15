@@ -6,10 +6,19 @@ const App = () => {
 
   const addName = (event) => {
     event.preventDefault();
-    const nameObject = {
-      name: newName,
-    };
-    setPersons(persons.concat(nameObject));
+    if (
+      persons.filter(
+        (person) => JSON.stringify(person.name) === JSON.stringify(newName)
+      ).length === 0
+    ) {
+      const nameObject = {
+        name: newName,
+      };
+      setPersons(persons.concat(nameObject));
+    } else {
+      window.alert(`${newName} is already in the phonebook.`);
+    }
+
     setNewName("");
   };
 
@@ -32,11 +41,9 @@ const App = () => {
       <table>
         <tbody>
           {persons.map((person) => (
-            <>
-              <tr>
-                <td key={person.name}>{person.name}</td>
-              </tr>
-            </>
+            <tr key={person.name}>
+              <td key={person.name}>{person.name}</td>
+            </tr>
           ))}
         </tbody>
       </table>
