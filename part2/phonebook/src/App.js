@@ -1,4 +1,7 @@
 import { useState } from "react";
+import PersonForm from "./components/PersonForm";
+import Filter from "./components/Filter";
+import PersonTable from "./components/PersonTable";
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -42,54 +45,23 @@ const App = () => {
     setSearchName(event.target.value);
   };
 
-  const printTable = () => {
-    if (searchName === "") {
-      return persons.map((person) => (
-        <tr key={person.name}>
-          <td key={person.name}>
-            {person.name} {person.number}
-          </td>
-        </tr>
-      ));
-    } else {
-      let filteredPeople = persons.filter((person) =>
-        JSON.stringify(person.name)
-          .toLowerCase()
-          .includes(searchName.toLowerCase())
-      );
-
-      return filteredPeople.map((person) => (
-        <tr key={person.name}>
-          <td key={person.name}>
-            {person.name} {person.number}
-          </td>
-        </tr>
-      ));
-    }
-  };
-
   return (
     <div>
       <h1>Phonebook</h1>
       <h2>Add New Entry</h2>
-      <form onSubmit={addName}>
-        <div>
-          name: <input value={newName} onChange={handleNewName} />
-        </div>
-        <div>
-          number: <input value={newNumber} onChange={handleNewNumber} />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <PersonForm
+        addName={addName}
+        newName={newName}
+        handleNewName={handleNewName}
+        newNumber={newNumber}
+        handleNewNumber={handleNewNumber}
+      />
       <h2>Entries</h2>
-      Filter by name: <input value={searchName} onChange={handleSearchName} />
+      Filter by name:
+      <Filter searchName={searchName} handleSearchName={handleSearchName} />
       <br />
       <br />
-      <table>
-        <tbody>{printTable()}</tbody>
-      </table>
+      <PersonTable searchName={searchName} persons={persons} />
     </div>
   );
 };
