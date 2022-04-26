@@ -4,10 +4,7 @@ import Filter from "./components/Filter";
 import PersonTable from "./components/PersonTable";
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: "Arto Hellas", number: "2345" },
-    { name: "Reagan M", number: "9877" },
-  ]);
+  const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [searchName, setSearchName] = useState("");
