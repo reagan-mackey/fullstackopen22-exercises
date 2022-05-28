@@ -71,7 +71,3 @@ const App = () => {
 };
 
 export default App;
-
-/*
-Modify the application such that the initial state of the data is fetched from the server using the axios-library
-*/
