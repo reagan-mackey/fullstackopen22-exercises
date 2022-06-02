@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import PersonForm from "./components/PersonForm";
 import Filter from "./components/Filter";
 import PersonTable from "./components/PersonTable";
+import personService from "./services/persons";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -11,8 +11,8 @@ const App = () => {
   const [searchName, setSearchName] = useState("");
 
   useEffect(() => {
-    axios.get("http://localhost:3001/persons").then((response) => {
-      setPersons(response.data);
+    personService.getAll().then((initialPeople) => {
+      setPersons(initialPeople);
     });
   }, []);
 
@@ -24,18 +24,16 @@ const App = () => {
         (person) => JSON.stringify(person.name) === JSON.stringify(newName)
       ).length === 0
     ) {
-      const nameObject = {
+      const personObject = {
         name: newName,
         number: newNumber,
       };
 
-      axios
-        .post("http://localhost:3001/persons", nameObject)
-        .then((response) => {
-          setPersons(persons.concat(nameObject));
-          setNewName("");
-          setNewNumber("");
-        });
+      personService.create(personObject).then((returnedPerson) => {
+        setPersons(persons.concat(returnedPerson));
+        setNewName("");
+        setNewNumber("");
+      });
     } else {
       window.alert(`${newName} is already in the phonebook.`);
     }
