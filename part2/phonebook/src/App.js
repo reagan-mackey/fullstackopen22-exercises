@@ -28,13 +28,17 @@ const App = () => {
         name: newName,
         number: newNumber,
       };
-      setPersons(persons.concat(nameObject));
+
+      axios
+        .post("http://localhost:3001/persons", nameObject)
+        .then((response) => {
+          setPersons(persons.concat(nameObject));
+          setNewName("");
+          setNewNumber("");
+        });
     } else {
       window.alert(`${newName} is already in the phonebook.`);
     }
-
-    setNewName("");
-    setNewNumber("");
   };
 
   const handleNewName = (event) => {
