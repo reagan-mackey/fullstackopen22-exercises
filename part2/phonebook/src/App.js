@@ -6,9 +6,9 @@ import personService from "./services/persons";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
-  const [newName, setNewName] = useState("");
+  const [newPerson, setNewPerson] = useState("");
   const [newNumber, setNewNumber] = useState("");
-  const [searchName, setSearchName] = useState("");
+  const [filter, setFilter] = useState("");
 
   useEffect(() => {
     personService.getAll().then((initialPeople) => {
@@ -16,39 +16,49 @@ const App = () => {
     });
   }, []);
 
-  const addName = (event) => {
+  const addPerson = (event) => {
     event.preventDefault();
 
     if (
       persons.filter(
-        (person) => JSON.stringify(person.name) === JSON.stringify(newName)
+        (person) => JSON.stringify(person.name) === JSON.stringify(newPerson)
       ).length === 0
     ) {
       const personObject = {
-        name: newName,
+        name: newPerson,
         number: newNumber,
       };
 
       personService.create(personObject).then((returnedPerson) => {
         setPersons(persons.concat(returnedPerson));
-        setNewName("");
+        setNewPerson("");
         setNewNumber("");
       });
     } else {
-      window.alert(`${newName} is already in the phonebook.`);
+      window.alert(`${newPerson} is already in the phonebook.`);
     }
   };
 
-  const handleNewName = (event) => {
-    setNewName(event.target.value);
+  const deletePerson = (id) => {
+    const toDelete = persons.find((person) => person.id === id);
+    const ok = window.confirm(`Delete ${toDelete.name}?`);
+    if (ok) {
+      personService.remove(id).then(() => {
+        setPersons(persons.filter((person) => person.id !== id));
+      });
+    }
+  };
+
+  const handleNewPerson = (event) => {
+    setNewPerson(event.target.value);
   };
 
   const handleNewNumber = (event) => {
     setNewNumber(event.target.value);
   };
 
-  const handleSearchName = (event) => {
-    setSearchName(event.target.value);
+  const handleFilter = (event) => {
+    setFilter(event.target.value);
   };
 
   return (
@@ -56,18 +66,22 @@ const App = () => {
       <h1>Phonebook</h1>
       <h2>Add New Entry</h2>
       <PersonForm
-        addName={addName}
-        newName={newName}
-        handleNewName={handleNewName}
+        addPerson={addPerson}
+        newPerson={newPerson}
+        handleNewPerson={handleNewPerson}
         newNumber={newNumber}
         handleNewNumber={handleNewNumber}
       />
       <h2>Entries</h2>
       Filter by name:
-      <Filter searchName={searchName} handleSearchName={handleSearchName} />
+      <Filter filter={filter} handleFilter={handleFilter} />
       <br />
       <br />
-      <PersonTable searchName={searchName} persons={persons} />
+      <PersonTable
+        filter={filter}
+        persons={persons}
+        deletePerson={deletePerson}
+      />
     </div>
   );
 };

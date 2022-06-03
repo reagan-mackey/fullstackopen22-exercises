@@ -1,10 +1,10 @@
 import Person from "./Person";
 
-const PersonTable = ({ searchName, persons }) => {
+const PersonTable = ({ filter, persons, deletePerson }) => {
   return (
     <table>
       <tbody>
-        <Person searchName={searchName} persons={persons} />
+        <Person filter={filter} persons={persons} deletePerson={deletePerson} />
       </tbody>
     </table>
   );
