@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import PersonForm from "./components/PersonForm";
 import Filter from "./components/Filter";
 import PersonTable from "./components/PersonTable";
+import Notification from "./components/Notification";
 import personService from "./services/persons";
 
 const App = () => {
@@ -9,6 +10,7 @@ const App = () => {
   const [newPerson, setNewPerson] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filter, setFilter] = useState("");
+  const [notification, setNotification] = useState("");
 
   useEffect(() => {
     personService.getAll().then((initialPeople) => {
@@ -33,6 +35,10 @@ const App = () => {
         setPersons(persons.concat(returnedPerson));
         setNewPerson("");
         setNewNumber("");
+        setNotification(`Added ${returnedPerson.name}`);
+        setTimeout(() => {
+          setNotification(null);
+        }, 3000);
       });
     } else {
       const ok = window.confirm(
@@ -52,6 +58,10 @@ const App = () => {
       personService.remove(id).then(() => {
         setPersons(persons.filter((person) => person.id !== id));
       });
+      setNotification(`Deleted ${toDelete.name}`);
+      setTimeout(() => {
+        setNotification(null);
+      }, 3000);
       setNewPerson("");
       setNewNumber("");
     }
@@ -66,6 +76,10 @@ const App = () => {
         persons.map((person) => (person.id !== id ? person : returnedPerson))
       );
     });
+    setNotification(`Updated ${person.name}`);
+    setTimeout(() => {
+      setNotification(null);
+    }, 3000);
   };
 
   const handleNewPerson = (event) => {
@@ -83,6 +97,7 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
+      <Notification message={notification} />
       <h2>Add New Entry</h2>
       <PersonForm
         addPerson={addPerson}
