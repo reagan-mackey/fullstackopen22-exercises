@@ -2,7 +2,7 @@ const Notification = ({ message }) => {
   if (message === null) return null;
 
   const notificationStyle = {
-    color: "green",
+    color: message.includes("Error") ? "red" : "green",
     background: "lightgrey",
     fontSize: 16,
     textAlign: "center",

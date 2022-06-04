@@ -10,7 +10,7 @@ const App = () => {
   const [newPerson, setNewPerson] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filter, setFilter] = useState("");
-  const [notification, setNotification] = useState("");
+  const [notification, setNotification] = useState(null);
 
   useEffect(() => {
     personService.getAll().then((initialPeople) => {
@@ -71,15 +71,24 @@ const App = () => {
     const person = persons.find((person) => person.id === id);
     const changedPerson = { ...person, number: newNumber };
 
-    personService.update(id, changedPerson).then((returnedPerson) => {
-      setPersons(
-        persons.map((person) => (person.id !== id ? person : returnedPerson))
-      );
-    });
-    setNotification(`Updated ${person.name}`);
-    setTimeout(() => {
-      setNotification(null);
-    }, 3000);
+    personService
+      .update(id, changedPerson)
+      .then((returnedPerson) => {
+        setPersons(
+          persons.map((person) => (person.id !== id ? person : returnedPerson))
+        );
+        setNotification(`Updated ${person.name}`);
+        setTimeout(() => {
+          setNotification(null);
+        }, 3000);
+      })
+      .catch((error) => {
+        setNotification(`Error, ${person.name} is already deleted`);
+        setTimeout(() => {
+          setNotification(null);
+        }, 3000);
+        setPersons(persons.filter((p) => p.id !== person.id));
+      });
   };
 
   const handleNewPerson = (event) => {
