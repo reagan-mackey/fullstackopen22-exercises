@@ -8,13 +8,13 @@ const PersonForm = ({
   return (
     <form onSubmit={addPerson}>
       <div>
-        name: <input value={newPerson} onChange={handleNewPerson} />
+        Name: <input value={newPerson} onChange={handleNewPerson} />
       </div>
       <div>
-        number: <input value={newNumber} onChange={handleNewNumber} />
+        Number: <input value={newNumber} onChange={handleNewNumber} />
       </div>
       <div>
-        <button type="submit">add</button>
+        <button type="submit">Add</button>
       </div>
     </form>
   );

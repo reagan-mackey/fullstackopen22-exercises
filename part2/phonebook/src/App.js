@@ -31,15 +31,25 @@ const App = () => {
         number: newNumber,
       };
 
-      personService.create(personObject).then((returnedPerson) => {
-        setPersons(persons.concat(returnedPerson));
-        setNewPerson("");
-        setNewNumber("");
-        setNotification(`Added ${returnedPerson.name}`);
-        setTimeout(() => {
-          setNotification(null);
-        }, 3000);
-      });
+      personService
+        .create(personObject)
+        .then((returnedPerson) => {
+          setPersons(persons.concat(returnedPerson));
+          setNewPerson("");
+          setNewNumber("");
+          setNotification(`Added ${returnedPerson.name}`);
+          setTimeout(() => {
+            setNotification(null);
+          }, 3000);
+        })
+        .catch((error) => {
+          setNewPerson("");
+          setNewNumber("");
+          setNotification(`Error: ${error.response.data.error}`);
+          setTimeout(() => {
+            setNotification(null);
+          }, 3000);
+        });
     } else {
       const ok = window.confirm(
         `${newPerson} is already in the phonebook, replace the old number with the new one?`
@@ -83,11 +93,10 @@ const App = () => {
         }, 3000);
       })
       .catch((error) => {
-        setNotification(`Error, ${person.name} is already deleted`);
+        setNotification(`Error: ${error.response.data.error}`);
         setTimeout(() => {
           setNotification(null);
         }, 3000);
-        setPersons(persons.filter((p) => p.id !== person.id));
       });
   };
 
